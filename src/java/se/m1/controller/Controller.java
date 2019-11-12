@@ -25,6 +25,7 @@ public class Controller extends HttpServlet {
     ArrayList<Employee> listEmployees;
     boolean isAdmin;
     int employeeId;
+    HttpSession currentSession;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,41 +39,53 @@ public class Controller extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         dba = new DBAction();
-        HttpSession currentSession = request.getSession(false);
+        currentSession = request.getSession(false);
         
+        //If the user tries to log in
         if(request.getParameter("connection") != null)
         {
-            //Data entered by the user
+            //Data entered by the user is placed into an object
             userInput = new User();
             userInput.setUsername(request.getParameter(FRM_USERNAME_FIELD));
             userInput.setPassword(request.getParameter(FRM_PWD_FIELD));
             
-            
+            //Check if the credentials are valid
             validUser = dba.checkCredentials(userInput);
             
+            //If the credentials are valid, create a session
             if (validUser != null) {
                 currentSession = request.getSession();
+                //Store the user object in the session to use its data later
                 currentSession.setAttribute("user", validUser);
                 
                 redirectToWelcome(request, response);
             } else {
+                //If the credentials are invalid, reload the login page
+                //with an error message
                 request.setAttribute("errKey", ERR_INVALID_CREDENTIALS);
                 request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
             }
         }
+        //If a session is active, go through possible form responses
+        //and treat them accordingly
         else if (currentSession != null)
         {
+            //Check if the current user is an administrator
             isAdmin = false;
             if(((User)(currentSession.getAttribute("user"))).getRank().equals("admin")) isAdmin = true;
             
+            //Going to the Add Employee page (Admin only)
             if (request.getParameter("add") != null)
             {
+                //If the user is not an administrator, forbid the action
+                //and redirect
                 if (isAdmin == false)
                 {
                     redirectToWelcome(request, response);
                 }
                 request.getRequestDispatcher(JSP_ADD_PAGE).forward(request, response);
             }
+            //Trying to add an employee to the database (Admin only)
             else if (request.getParameter("addbutton") != null)
             {
                 if (isAdmin == false)
@@ -93,8 +106,10 @@ public class Controller extends HttpServlet {
                 dba.AddEmployee(myEmployee);
                 redirectToWelcome(request, response);
             }
+            //Viewing employee details
             else if (request.getParameter("detail") != null)
             {
+                //Stop if no employee was selected
                 if(request.getParameter(FRM_EMPLOYEE_ID) == null)
                 {
                     redirectToWelcome(request, response);
@@ -106,17 +121,19 @@ public class Controller extends HttpServlet {
                     request.getRequestDispatcher(JSP_DETAIL_PAGE).forward(request, response);
                 }
             }
+            //Clicking a cancel button
             else if (request.getParameter("cancel") != null)
             {
                 redirectToWelcome(request, response);
             }
-
+            //Trying to delete an employee from the database (Admin only)
             else if (request.getParameter("delete") != null)
             {
                 if (isAdmin == false)
                 {
                     redirectToWelcome(request, response);
                 }
+                //Stop if no employee was selected
                 if(request.getParameter(FRM_EMPLOYEE_ID) == null)
                 {
                     redirectToWelcome(request, response);
@@ -128,6 +145,7 @@ public class Controller extends HttpServlet {
                     redirectToWelcome(request, response);
                 }
             }
+            //Trying to update employee data (Admin only)
             else if (request.getParameter("update") != null)
             {
                 if (isAdmin == false)
@@ -148,12 +166,14 @@ public class Controller extends HttpServlet {
                 dba.updateEmployee(myEmployee);
                 redirectToWelcome(request, response);
             }
+            //Logging out
             else if (request.getParameter("logout") != null)
             {
                 request.getSession().invalidate();
                 request.getRequestDispatcher(JSP_GOODBYE_PAGE).forward(request, response);
             }
         }
+        //If nothing matches, redirect to the login page
         else
         {
             request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);

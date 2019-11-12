@@ -4,23 +4,19 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Employee Management Project</title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <style>
         body {
           font-family: Arial, Helvetica, sans-serif;
           background-color: black;
         }
-
         * {
           box-sizing: border-box;
         }
-
         /* Add padding to containers */
         .container {
           padding: 16px;
           background-color: white;
         }
-
         /* Full-width input fields */
         input[type=text], input[type=password] {
           width: 100%;
@@ -30,18 +26,15 @@
           border: none;
           background: #f1f1f1;
         }
-
         input[type=text]:focus, input[type=password]:focus {
           background-color: #ddd;
           outline: none;
         }
-
         /* Overwrite default styles of hr */
         hr {
           border: 1px solid #f1f1f1;
           margin-bottom: 25px;
         }
-
         /* Set a style for the submit button */
         .registerbtn {
           background-color: #4CAF50;
@@ -53,31 +46,59 @@
           width: 100%;
           opacity: 0.9;
         }
-
         .registerbtn:hover {
           opacity: 1;
         }
-
         /* Add a blue text color to links */
         a {
           color: dodgerblue;
         }
-
         /* Set a grey background color and center the text of the "sign in" section */
         .signin {
           background-color: #f1f1f1;
           text-align: center;
         }
+        ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          background-color: #333;
+        }
+
+        li {
+          float: left;
+        }
+
+        li a {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+        }
+
+        li a:hover:not(.active) {
+          background-color: #111;
+        }
+
+        .active {
+          background-color: #4CAF50;
+          height: 50px;
+        }
+
+        .person{
+            background-color: lightblue;
+        }
 </style>
     </head>
     <body>
-         <div class="header">
-           <form method='post' name='myform' action='Controller'>
-                <h1 style="float:left;">Hello ${user.username}, your rank is (${user.rank})</h1>
-                <h1 style="float:right;">Log Out<button type="submit" name="logout"><i class="material-icons">power_settings_new</i></button></h1>
-                <br/>
-           </form>
-         </div>
+         <ul>
+        <form method='post' action='Controller'>
+      <li><input type="submit" class="active" name="logout" value="Log Out"></li>
+      </form>
+      <li><a class="person">Hello ${user.username}, you are an ${user.rank}</a></li>
+    </ul>
          <div class="container">
            <h1>Add an Employee</h1>
            <p>Please fill the form to add a new employee</p>

@@ -66,7 +66,6 @@ public class DBAction {
             System.out.println(sqle.getMessage());
         }
         return rs;
-
     }
 
     /**
@@ -187,8 +186,7 @@ public class DBAction {
             st.setString(8, aEmployee.getCity());
             st.setString(9, aEmployee.getMail());
             
-            st.execute(); 
-            System.out.println("Data Successful");
+            st.execute();
         } catch (SQLException ex) {
             Logger.getLogger(DBAction.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -230,7 +228,6 @@ public class DBAction {
             st.setString(9, aEmployee.getMail());
             st.setInt(10, aEmployee.getId());
             st.execute(); 
-            System.out.println("Data Successful");
             st.close();
         } catch (SQLException ex) {
             Logger.getLogger(DBAction.class.getName()).log(Level.SEVERE, null, ex);
