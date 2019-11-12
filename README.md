@@ -1,8 +1,12 @@
 # JEEProject
 
 This application requires a Java Database. Use the following script to generate the tables.
+
 Employee login is empl, empl
+
 Admin login is admin, admin
+
+Javadoc can be found at /dist/javadoc/index.html
 
 /*Credentials table*/
 
