@@ -6,7 +6,7 @@ Employee login is empl, empl
 
 Admin login is admin, admin
 
-Javadoc can be found at /dist/javadoc/index.html
+Javadoc can be generated from the comments
 
 /*Credentials table*/
 
